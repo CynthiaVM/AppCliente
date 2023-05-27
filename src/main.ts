@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const clientesLink = document.getElementById('clientes');
   const crearClienteLink = document.getElementById('crear-cliente');
 
-  // Función para obtener los datos de los clientes
+  // Obtener datos de los clientes
   async function getClientes() {
     try {
       const response = await axios.get('/api/clientes'); // Ruta de la API para obtener los clientes
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Función para crear un nuevo cliente
+  // Crear un nuevo cliente
   async function crearCliente(cliente) {
     try {
       await axios.post('/api/clientes', cliente); // Ruta de la API para crear un cliente
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Función para mostrar la sección "Home"
+  // Mostrar la sección "Home"
   function showHome() {
     if (appContainer) {
       appContainer.innerHTML = `
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Función para mostrar la sección "Clientes"
+  // Mostrar la sección "Clientes"
   async function showClientes() {
     if (appContainer) {
       const clientes = await getClientes();
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Función para mostrar la sección "Crear Cliente"
+  // Mostrar la sección "Crear Cliente"
   function showCrearCliente() {
     if (appContainer) {
       appContainer.innerHTML = `
@@ -102,6 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
     crearClienteLink.addEventListener('click', showCrearCliente);
   }
 
-  // Mostrar la sección de inicio por defecto
+  // Mostrar Inicio por defecto
   showHome();
 });
