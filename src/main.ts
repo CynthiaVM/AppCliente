@@ -1,27 +1,36 @@
 import axios from 'axios';
 
+interface Cliente {
+  nombre: string;
+  apellido: string;
+  edad: number;
+  email: string;
+  Empresa: string;
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
   const appContainer = document.getElementById('app');
 
-  const menuLink = document.getElementById('menu');
-  const clientesLink = document.getElementById('clientes');
-  const crearClienteLink = document.getElementById('crear-cliente');
+  const menuLink = document.getElementById('#menu');
+  const homeLink = document.querySelector<HTMLAnchorElement>('#Home');
+  const clientesLink = document.querySelector<HTMLAnchorElement>('#clientes');
+  const crearClienteLink = document.querySelector<HTMLAnchorElement>('#crear-cliente');
 
   // Obtener datos de los clientes
   async function getClientes() {
     try {
-      const response = await axios.get('/api/clientes'); // Ruta de la API para obtener los clientes
+      const response = await axios.get('cliente'); // Ruta de la API para obtener los clientes /api/clientes
       return response.data;
     } catch (error) {
       console.error('Error al obtener los clientes:', error);
       return [];
     }
   }
-
   // Crear un nuevo cliente
-  async function crearCliente(cliente) {
+  async function crearCliente(cliente:Cliente) {
     try {
-      await axios.post('/api/clientes', cliente); // Ruta de la API para crear un cliente
+      await axios.post('/api/clientes'); // Ruta de la API para crear un cliente '/api/clientes'
       console.log('Cliente creado exitosamente');
     } catch (error) {
       console.error('Error al crear el cliente:', error);
@@ -37,19 +46,25 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
     }
   }
+  //esto tiene que hacer que el home se muestre solo cuando le hago clic
+if (menuLink) {
+  menuLink.addEventListener('click', () => {
+    showHome();
+  });
+}
 
   // Mostrar la sección "Clientes"
   async function showClientes() {
     if (appContainer) {
       const clientes = await getClientes();
       let clientesHTML = '<h1>Listado de Clientes</h1>';
-      clientes.forEach((cliente) => {
-        clientesHTML += `<p>${cliente.nombre} - ${cliente.email}</p>`;
+      clientes.forEach((cliente: Cliente) => {
+        clientesHTML += `<p>${cliente.nombre} -${cliente.apellido}- ${cliente.edad}${cliente.email}${cliente.Empresa}-</p>`;
       });
       appContainer.innerHTML = clientesHTML;
     }
   }
-
+  
   // Mostrar la sección "Crear Cliente"
   function showCrearCliente() {
     if (appContainer) {
@@ -58,12 +73,19 @@ document.addEventListener('DOMContentLoaded', () => {
         <form id="crearClienteForm">
           <label for="nombre">Nombre:</label>
           <input type="text" id="nombre" name="nombre" required>
+          <br><br/>
           <label for="apellido">Apellido:</label>
           <input type="text" id="apellido" name="apellido" required>
+          <br><br/>
           <label for="edad">Edad:</label>
           <input type="number" id="edad" name="edad" required>
+          <br><br/>
           <label for="email">Email:</label>
           <input type="email" id="email" name="email" required>
+          <br><br/>
+          <label for="empresa">Empresa:</label>
+          <input type="text" id="empresa" name="empresa" required>
+          <br><br/>
           <button type="submit">Crear</button>
         </form>
       `;
@@ -71,16 +93,35 @@ document.addEventListener('DOMContentLoaded', () => {
       if (form) {
         form.addEventListener('submit', async (event) => {
           event.preventDefault();
-          const nombreInput = document.getElementById('nombre');
-          const apellidoInput = document.getElementById('apellido');
-          const edadInput = document.getElementById('edad');
-          const emailInput = document.getElementById('email');
+          const nombreInput = document.getElementById('nombre') as HTMLInputElement;
+          const apellidoInput = document.getElementById('apellido') as HTMLInputElement;
+          const edadInput = document.getElementById('edad') as HTMLInputElement;
+          const emailInput = document.getElementById('email') as HTMLInputElement;
+          const empresaInput = document.getElementById('empresa') as HTMLInputElement; //agregando htmlInputElement me deja hacer los value
+          //necesarios si estoy trabajando con un input de tipo texto
           const nombre = nombreInput.value;
           const apellido = apellidoInput.value;
           const edad = parseInt(edadInput.value);
           const email = emailInput.value;
-          const cliente = { nombre, apellido, edad, email };
+          const Empresa= empresaInput.value;
+          const cliente = { nombre, apellido, edad, email, Empresa };
           await crearCliente(cliente);
+
+          function validarMail(correo: string): boolean {
+            const patronCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return patronCorreo.test(correo);
+          }
+          
+          // Ejemplos
+          const correoValido = 'ejemplo@dominio.com';
+          const correoInvalido = 'ejemplo@dominio';
+          
+          console.log(validarMail(correoValido)); // true
+          console.log(validarMail(correoInvalido)); // false
+          
+
+
+
         });
       }
     }
