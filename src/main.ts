@@ -1,4 +1,6 @@
 import axios from 'axios';
+import './style.css';
+
 
 interface Cliente {
   nombre: string;
@@ -133,7 +135,7 @@ if (menuLink) {
   if (clientesLink) {
     clientesLink.addEventListener('click', showClientes);
   }
-  if (menuLink) {
+  if (homeLink) {
     menuLink.addEventListener('click', showHome);
   }
   if (clientesLink) {
